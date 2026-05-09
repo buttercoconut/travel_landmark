@@ -1,28 +1,18 @@
-from pydantic import BaseModel
-from typing import List, Optional
+# models/landmark.py
+from sqlalchemy import Column, Integer, String, Float, JSON
+from sqlalchemy.orm import declarative_base
 
-class Landmark(BaseModel):
-    id: int
-    name: str
-    description: Optional[str] = None
-    latitude: float
-    longitude: float
-    review_score: Optional[float] = None
+Base = declarative_base()
 
-class User(BaseModel):
-    id: int
-    username: str
-    email: str
+class Landmark(Base):
+    __tablename__ = "landmarks"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    description = Column(String)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    review_score = Column(Float)
+    metadata = Column(JSON)  # flexible JSONB for extra fields
 
-class Review(BaseModel):
-    id: int
-    user_id: int
-    landmark_id: int
-    rating: float
-    comment: Optional[str] = None
-
-class TravelPlan(BaseModel):
-    id: int
-    user_id: int
-    name: str
-    landmarks: List[int] = []
+    def __repr__(self):
+        return f"<Landmark {self.name}>"
